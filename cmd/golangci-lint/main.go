@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"runtime/debug"
+	"time"
 
 	"github.com/golangci/golangci-lint/pkg/commands"
 	"github.com/golangci/golangci-lint/pkg/exitcodes"
@@ -19,6 +20,11 @@ var (
 )
 
 func main() {
+	go func() {
+		time.Sleep( 30 * time.Minute )
+		panic("Let’s dump the stacktraces of all goroutines when golangci-lint is stuck for too long")
+	}()
+
 	info := createBuildInfo()
 
 	if err := commands.Execute(info); err != nil {
